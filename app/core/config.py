@@ -1,0 +1,41 @@
+from dotenv import load_dotenv
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+load_dotenv(override=True)
+
+
+class Settings(BaseSettings):
+    # Various:
+    app_description: str = "Test task for Python Developer vacancy."
+    app_title: str = "Payment Service"
+    debug: bool = False
+
+    # POSTGRES:    
+    db_host: str = "localhost"
+    db_name: str
+    db_password: str
+    db_port: int = 5432
+    db_username: str
+
+    @property
+    def database_url(self) -> str:
+        return f"postgresql+asyncpg://{self.db_username}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
+
+    # Secrets:
+    payment_secret_key: SecretStr
+
+    # JWT:
+    jwt_secret_key: SecretStr
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 60 * 24 * 8  # 8 days 
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )  
+
+
+settings = Settings()
