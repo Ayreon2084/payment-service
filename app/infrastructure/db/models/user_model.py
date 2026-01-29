@@ -2,10 +2,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
 
 from app.infrastructure.db.database import Base
-from infrastructure.db.mixins import LifecycleMixin
+from infrastructure.db.mixins import LifecycleWithDeleteMixin
 
 
-class User(LifecycleMixin, Base):
+class User(LifecycleWithDeleteMixin, Base):
     email: Mapped[str] = mapped_column(
         String(100),
         unique=True,
@@ -20,5 +20,9 @@ class User(LifecycleMixin, Base):
 
     accounts: Mapped[list["Account"]]  = relationship(
         "Account",
+        back_populates="user"
+    )
+    payments: Mapped[list["Payment"]] = relationship(
+        "Payment",
         back_populates="user"
     )
