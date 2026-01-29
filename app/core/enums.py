@@ -9,3 +9,8 @@ class CurrencyEnum(str, Enum):
     CNY = "CNY"
     CHF = "CHF"
 
+
+class PaymentStatus(str, Enum):
+    PENDING = "pending"
+    SUCCESS = "success"
+    FAIL = "fail"
