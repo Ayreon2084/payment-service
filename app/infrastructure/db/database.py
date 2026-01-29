@@ -1,10 +1,10 @@
 import re
+from typing import Any
 
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import (
     DeclarativeBase, Mapped,
-    mapped_column, declared_attr,
-    async_sessionmaker
+    declared_attr, mapped_column
 )
 
 from app.core.config import settings
@@ -13,7 +13,7 @@ from app.core.config import settings
 class Base(DeclarativeBase):
 
     @declared_attr
-    def __tablename__(cls):
+    def __tablename__(cls) -> Any:
         return re.sub(r'(?<!^)(?=[A-Z])', '_', cls.__name__).lower() + "s"
     
     id: Mapped[int] = mapped_column(primary_key=True)

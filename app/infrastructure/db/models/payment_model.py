@@ -16,14 +16,18 @@ class Payment(LifecycleMixin, Base):
     )
     amount: Mapped[int] = mapped_column(BigInteger, nullable=False)
     status: Mapped[PaymentStatus] = mapped_column(
-        SQLEnum(PaymentStatus, name="payment_status"),
+        SQLEnum(
+            PaymentStatus,
+            name="payment_status",
+            values_callable=lambda enum: [e.value for e in enum],
+        ),
         nullable=False,
         default=PaymentStatus.PENDING,
         server_default=PaymentStatus.PENDING.value
     )
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.id"),
+        ForeignKey("users.id"),
         nullable=False
     )
     user: Mapped["User"] = relationship(
@@ -32,7 +36,7 @@ class Payment(LifecycleMixin, Base):
     )
 
     account_id: Mapped[int] = mapped_column(
-        ForeignKey("account.id"),
+        ForeignKey("accounts.id"),
         nullable=False
     )
     account: Mapped["Account"] = relationship(

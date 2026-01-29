@@ -13,13 +13,14 @@ class Account(LifecycleWithDeleteMixin, Base):
         SQLEnum(
             CurrencyEnum,
             name="currency_type",
+            values_callable=lambda enum: [e.value for e in enum],
         ),
         nullable=False,
         default=CurrencyEnum.USD,
-        server_default=CurrencyEnum.USD.value,
+        server_default=CurrencyEnum.USD.value
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.id"),
+        ForeignKey("users.id"),
         nullable=False
     )
 
@@ -29,7 +30,7 @@ class Account(LifecycleWithDeleteMixin, Base):
     )
     payments: Mapped[list["Payment"]] = relationship(
         "Payment",
-        back_populates="account"
+        back_populates="accounts"
     )
 
     __table_args__ = (
