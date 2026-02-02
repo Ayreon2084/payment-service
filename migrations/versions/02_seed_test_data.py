@@ -57,7 +57,7 @@ def upgrade() -> None:
 
     op.execute(
         f"INSERT INTO accounts (user_id, balance, currency, is_deleted) "
-        f"SELECT id, 1000.0, 'USD', False FROM users WHERE email = '{settings.seed_user_email}'"
+        f"SELECT id, 100000, 'USD', False FROM users WHERE email = '{settings.seed_user_email}'"
     )
 
 
