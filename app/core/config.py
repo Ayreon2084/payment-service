@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     def database_url(self) -> str:
         return f"postgresql+asyncpg://{self.db_username}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
+    # Predefined users for seeding:
+    seed_admin_email: str
+    seed_admin_password: str
+    seed_user_email: str
+    seed_user_password: str
+
     # Secrets:
     payment_secret_key: SecretStr
 
