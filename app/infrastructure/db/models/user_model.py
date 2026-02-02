@@ -20,9 +20,9 @@ class User(LifecycleWithDeleteMixin, Base):
 
     accounts: Mapped[list["Account"]]  = relationship(
         "Account",
-        back_populates="users"
+        back_populates="user"
     )
     payments: Mapped[list["Payment"]] = relationship(
         "Payment",
-        back_populates="users"
+        back_populates="user"
     )

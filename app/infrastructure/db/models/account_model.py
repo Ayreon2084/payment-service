@@ -30,7 +30,7 @@ class Account(LifecycleWithDeleteMixin, Base):
     )
     payments: Mapped[list["Payment"]] = relationship(
         "Payment",
-        back_populates="accounts"
+        back_populates="account"
     )
 
     __table_args__ = (
