@@ -54,21 +54,25 @@ def upgrade() -> None:
             "is_deleted": False,
         },
     ])
-
-    op.execute(
-        f"INSERT INTO accounts (user_id, balance, currency, is_deleted) "
-        f"SELECT id, 100000, 'USD', False FROM users WHERE email = '{settings.seed_user_email}'"
+    stmt = sa.text(
+        "INSERT INTO accounts (user_id, balance, currency, is_deleted) "
+        "SELECT id, 100000, 'USD', False FROM users WHERE email = :user_email"
     )
+    op.execute(stmt.params(user_email=settings.seed_user_email))
 
 
 def downgrade() -> None:
     """Downgrade schema."""
-    op.execute(
-        f"DELETE FROM accounts WHERE user_id IN ("
-        f"SELECT id FROM users WHERE email ='{settings.seed_user_email}'"
-        f")"
+    stmt_acc = sa.text(
+        "DELETE FROM accounts WHERE user_id IN ("
+        "SELECT id FROM users WHERE email = :user_email)"
     )
+    op.execute(stmt_acc.params(user_email=settings.seed_user_email))
 
-    op.execute(
-        f"DELETE FROM users WHERE email IN ('{settings.seed_admin_email}', '{settings.seed_user_email}')"
+    stmt_users = sa.text(
+        "DELETE FROM users WHERE email IN (:admin_email, :user_email)"
     )
+    op.execute(stmt_users.params(
+        admin_email=settings.seed_admin_email, 
+        user_email=settings.seed_user_email
+    ))
