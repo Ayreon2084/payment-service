@@ -38,7 +38,12 @@ async def generate_test_sig(
     """
     Endpoint made for reviewer purposes only.
     Allows to generate valid signature for webhook testing.
+    Available only when DEBUG=True.
     """
+    if not settings.debug:
+        raise HTTPException(
+            status_code=404, detail="Endpoint available only in debug mode"
+        )
     strategy = MockWebhookStrategy()
     sig = strategy.generate_signature(
         account_id, int(amount), transaction_id, user_id
