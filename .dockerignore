@@ -1,0 +1,20 @@
+<!-- Files -->
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.env.example
+.git
+.DS_Store
+*.sqlite3
+*.db
+*.log
+
+<!-- Folders -->
+.git/
+.mypy_cache/
+.venv/
+.vscode/
+.app/
+embedding_debug/
