@@ -1,5 +1,5 @@
-from datetime import datetime
 import re
+from datetime import datetime
 
 from pydantic import (
     BaseModel,
@@ -14,6 +14,7 @@ from app.schemas.account import AccountRead
 
 class UserBase(BaseModel):
     """Base schema for user data with shared attributes."""
+
     email: EmailStr
     full_name: str | None = Field(default=None, max_length=100)
 
@@ -21,6 +22,7 @@ class UserBase(BaseModel):
 # Schemas for basic users:
 class UserCreate(UserBase):
     """Schema for user registration (public endpoint)."""
+
     password: str = Field(min_length=8, max_length=32)
 
     @field_validator("password")
@@ -37,6 +39,7 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     """Schema for reading user data in API responses."""
+
     id: int
     created_at: datetime
     is_admin: bool
@@ -46,6 +49,7 @@ class UserRead(UserBase):
 
 class UserUpdate(BaseModel):
     """Schema for partial user profile updates by the user themselves."""
+
     email: EmailStr | None = None
     full_name: str | None = Field(default=None, max_length=100)
     password: str | None = Field(default=None, min_length=8, max_length=32)
@@ -54,6 +58,7 @@ class UserUpdate(BaseModel):
 # Schemas for admin users:
 class UserAdminReadWithAccounts(UserRead):
     """Detailed user schema for admin including user's accounts."""
+
     accounts: list[AccountRead] = []
     deleted_at: datetime | None = None
     is_deleted: bool
@@ -63,10 +68,11 @@ class UserAdminReadWithAccounts(UserRead):
 
 class UserAdminCreate(UserCreate):
     """Schema for admin-level user creation with privilege management."""
+
     is_admin: bool = False
 
 
 class UserAdminUpdate(UserUpdate):
     """Schema for admin-level user modification."""
+
     is_admin: bool | None = None
-    is_deleted: bool | None = None
