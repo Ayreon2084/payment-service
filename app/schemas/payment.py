@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import (
     BaseModel,
@@ -13,23 +14,25 @@ class PaymentBase(BaseModel):
     """
     Base schema for payment data with shared attributes.
     """
+
     amount: int = Field(
-        gt=0,
-        description="Amount in cents/eurocents/smallest units etc"
+        gt=0, description="Amount in cents/eurocents/smallest units etc"
     )
     account_id: int
 
 
 class PaymentCreate(PaymentBase):
     """
-    Schema for creating a new payment. 
+    Schema for creating a new payment.
     Status is set by the system.
     """
+
     pass
 
 
 class PaymentRead(PaymentBase):
     """Full representation of a payment record."""
+
     id: int
     transaction_id: str
     user_id: int
@@ -41,7 +44,16 @@ class PaymentRead(PaymentBase):
 
 class PaymentUpdate(BaseModel):
     """
-    Schema for updating payment status 
+    Schema for updating payment status
     (e.g., by a payment gateway callback).
     """
+
     status: PaymentStatus
+
+
+class WebhookData(BaseModel):
+    transaction_id: str
+    user_id: int
+    account_id: int
+    amount: Decimal
+    signature: str
